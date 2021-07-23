@@ -2,11 +2,9 @@ import traceback
 
 from flask import Flask, jsonify, request, render_template
 
-from utils.jieba_tools.JieBaWorker import JieBaWorker
-from utils.tools import merge_excel_worker, excel_clear_html_worker, json_to_excel, HtmlMaker
-from utils.tools.format.format_excel import replace_excel_worker
-from web import TEMPLATE_PATH, STATIC_PATH
-from web.controller import file_to_xlsx, file_to_html
+from utils import merge_excel_worker, excel_clear_html_worker, json_to_excel, HtmlMaker, replace_excel_worker,JieBaWorker
+from web import file_to_xlsx, file_to_html
+from conf import TEMPLATE_PATH, STATIC_PATH
 
 app = Flask(__name__, template_folder=TEMPLATE_PATH, static_folder=STATIC_PATH)
 

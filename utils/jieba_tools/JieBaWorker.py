@@ -2,7 +2,8 @@ from collections import namedtuple, deque
 
 import jieba
 import jieba.posseg as pseg
-from utils import CITY_NAME, RE_PUNCTUATION
+
+from conf import CITY_NAME, RE_PUNCTUATION
 
 
 class JieBaWorker:

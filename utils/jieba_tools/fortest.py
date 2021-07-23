@@ -2,7 +2,6 @@ import json
 import urllib.request
 import urllib.response
 
-
 def postData_noHeader(url, postdata):
     try:
         data = bytes(json.dumps(postdata), encoding='utf8')
