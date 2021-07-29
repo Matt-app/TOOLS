@@ -4,6 +4,7 @@ import jieba
 import jieba.posseg as pseg
 
 from conf import CITY_NAME, RE_PUNCTUATION
+from t_wraps import time_this
 
 
 class JieBaWorker:
@@ -73,6 +74,7 @@ class JieBaWorker:
             pass
         pass
 
+    @time_this
     def work(self, data):
         jieba.enable_paddle()
         data_list = pseg.cut(data, use_paddle=True)
