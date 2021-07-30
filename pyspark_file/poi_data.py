@@ -309,8 +309,29 @@ if __name__ == '__main__':
         .join(df_poi_uv, on='officialpoiid', how='left').repartition(1000)
     # df_r.explain()
     df_r.createOrReplaceTempView('out_put')
+    # 指不定哪个好用
+    # spark.sql('''
+    # insert overwrite table dw_youdb.cdm_bigtagle_poi_df partition (d=current_date)
+    # select
+    #     officialpoiid,districtid,
+    #     poitype,poiname,pinyin,ename,poiaddress,glat,glon,gglat,gglon,blat,blon,sourcetype,businessid,rating,score,
+    #     isgsshow,iscalibration,platform,businessstatus,commentcount,datachange_createtime,datachange_lasttime,editor,
+    #     auditor,remark,creator,poi_mapping,eaddress,localname,tickettype,tips,playspendunit,playspendmin,playspendmax,
+    #     playspendsource,shortfeature,hasticketgoods,ownership,businessdes,features,transit,ticketdesc,introduction,
+    #     currency,avgcostper,isglobalbuy,servicefacility,weibo,twitter,wechat,facebook,pricedesc,tickethasmoreprice,
+    #     officialsite,availablecurrency,guide,effecttime,expiretime,effectivetimesource,email,ticketprice,
+    #     michelinrecommendstar,sighttokentype,michelinenvironmentlevel,businessremark,bookingtipsrich,bookingtips,
+    #     officallevel,ugcshortfeature,formattimetips,hasformattime,sightneedgateticket,ticketrestriction,custommapfield,
+    #     locatedpark,shopguidemap,shopguidepdf,panoramagram,airportplan,hotelpoiid,shortaddress,shortname,hotelrecommend,
+    #     hotelparentid,hotelmetro,hotelsort,shortename,poisubtype,flightid,airline,crafttype,displayname,airporttext,
+    #     terminalext,terminalname,terminalandthreecode,trainstationid,sightannouncement,businesssuspendedtime,
+    #     businessstarttime,preferentialpolicies,storetype,isvirtual,plump,shopservicedesc,elevationlevel,itemcategory,
+    #     address2,needappointment,inadvance,appointmentway,checkinpark,threecode,displaycoverimageid,tagids,tagnames,
+    #     district_name_map,district_id_map,isinchina,districtname,districtpath,districtpath_name,global_names,global_dirs,
+    #     quality,uv_level,uv90,pv90,{} as d
+    # from out_put
+    # '''.format(TODAY))
     spark.sql('''
-    insert into dw_youdb.cdm_bigtagle_poi_df partition(d=current_date) 
     select
         officialpoiid,districtid,
         poitype,poiname,pinyin,ename,poiaddress,glat,glon,gglat,gglon,blat,blon,sourcetype,businessid,rating,score,
@@ -327,8 +348,9 @@ if __name__ == '__main__':
         businessstarttime,preferentialpolicies,storetype,isvirtual,plump,shopservicedesc,elevationlevel,itemcategory,
         address2,needappointment,inadvance,appointmentway,checkinpark,threecode,displaycoverimageid,tagids,tagnames,
         district_name_map,district_id_map,isinchina,districtname,districtpath,districtpath_name,global_names,global_dirs,
-        quality,uv_level,uv90,pv90 
-    from out_put
-    ''')
+        quality,uv_level,uv90,pv90,{} as d
+        from out_put
+    '''.format(TODAY)).write.mode('overwrite').insertInto('dw_youdb.cdm_bigtagle_poi_df')
+    print(TODAY)
     # 存临时表
-    df_r.write.saveAsTable(name='tmp_youdb.tmp_matt_0701', mode='overwrite')
+    # df_r.write.saveAsTable(name='tmp_youdb.tmp_matt_0701', mode='overwrite')
